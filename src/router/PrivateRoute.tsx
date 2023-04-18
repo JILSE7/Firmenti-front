@@ -8,7 +8,6 @@ interface IProps {
 
 export const PrivateRoute = ({children}:IProps) => {
   const {login} = useSelector((state:RootState) => state.auth)
-  console.log({login});
   return login ? <>{children}</>  : <Navigate to={"/login"}/>
 
 }

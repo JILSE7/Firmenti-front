@@ -108,10 +108,11 @@ const RegisterForm = () => {
 
         <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
           <Button data-testid="button-submit" type="submit" variant="outlined" disabled={loading}>Register</Button>
+          <Button onClick={() => navigate("/login")} >Log in</Button>
         </Box>
       </form>
     </>
   )
 }
 
-export default RegisterForm
+export default RegisterForm;

@@ -33,8 +33,6 @@ const ModalCategory: FC<IProps> = () => {
   const dispatch = useDispatch<AppDispatch>();
   const handleOpenModal = (openModal: boolean) => dispatch(handleCategoryModal(openModal));
   
-  console.log({isModalOpen});
-
   return (
     <>
       <Modal

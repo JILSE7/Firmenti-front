@@ -13,14 +13,15 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store';
 import { logOut } from '../../redux/slices';
 
 
 const pages = [{ name: 'Mis Productos', path: '/myProducts' }, { name: 'Categorias', path: '/categories' }];
 
 function ResponsiveAppBar() {
+  const {user} = useSelector((state: RootState) => state.auth)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>()
@@ -68,7 +69,7 @@ function ResponsiveAppBar() {
             {pages.map((page) => (
               <Button
                 key={page.path}
-                data-testid="button-myproducts"
+                data-testid={`button${page.path}`}
                 onClick={() => navigate(page.path)}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
@@ -80,7 +81,7 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Configuraciones">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt={user?.name} src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu

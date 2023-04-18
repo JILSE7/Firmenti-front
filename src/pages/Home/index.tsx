@@ -12,6 +12,7 @@ import { useEffect } from "react"
 import { getCategoriesService, getProductService } from "../../services/api.services"
 import { ProductList } from "../../components"
 import ModalProduct from "../../components/modals/ModalProduct"
+import { Typography } from "@mui/material"
 
 
 const HomePage = () => {
@@ -33,6 +34,7 @@ const HomePage = () => {
   return (
     <div className="global_container">
       <ResponsiveAppBar />
+      <Typography variant="h5" textAlign="center" sx={{mt: 5}} gutterBottom color={"#1976d2"}> Todos los productos </Typography>
       <div className="product_list_container">
         <ProductList products={products.data} />
       </div>

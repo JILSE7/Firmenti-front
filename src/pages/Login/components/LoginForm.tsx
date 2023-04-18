@@ -75,7 +75,9 @@ const LoginForm = () => {
 
         <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
           <Button data-testid="button-submit" type="submit" variant="outlined" disabled={loading}>Log in</Button>
+          <Button onClick={() => navigate("/register")} >Register</Button>
         </Box>
+        
       </form>
     </>
   )

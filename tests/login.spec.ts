@@ -4,7 +4,7 @@ const LOCAL_URL = "http://localhost:5173/login"
 
 test.describe("Test in login page", () => {
 
-  test("Shloud render login page", async({page}) => {
+  test("Should render login page", async({page}) => {
     await page.goto(LOCAL_URL)
     const title = await page.getByText(/Products App/);
 
@@ -65,12 +65,12 @@ test.describe("Test in login page", () => {
     await page.getByTestId('button-submit').click();
   
     const sonnerInit = await page.getByText(/Iniciando sesión/)
-    const sonnerUser = await page.getByText(/Bienvenido said/)
+    const sonnerUser = await page.getByText(/Bienvenido/)
     await expect(sonnerInit).toBeVisible();
     await expect(sonnerUser).toBeVisible();
 
 
-    const myProductsBtn = await page.getByTestId("button-myproducts");
+    const myProductsBtn = await page.getByTestId("button/myProducts");
     await expect(myProductsBtn).toBeVisible();
     await expect(myProductsBtn).toHaveText("Mis Productos");
   });

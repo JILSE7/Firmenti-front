@@ -11,8 +11,6 @@ const updateHeaders = (req:any) => {
 
 export const AxiosInterceptor = () => {
   axios.interceptors.request.use(req => {
-    console.log("Hice una interceptions");
-
     return updateHeaders(req);
   })
 }
