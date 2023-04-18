@@ -36,7 +36,7 @@ const MyProductsPage = () => {
   return (
     <div className="global_container">
       <ResponsiveAppBar />
-      <Typography variant="h5" textAlign="center" sx={{mt: 5}} gutterBottom color={"#1976d2"}> Mis Productos </Typography>
+      <Typography variant="h5" textAlign="center" sx={{mt: 5}} gutterBottom color={"#1976d2"}> Mis productos </Typography>
       <div className="product_list_container">
         <ProductList products={myProducts} />
       </div>

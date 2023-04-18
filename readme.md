@@ -20,7 +20,6 @@ Por supuesto nada es perfecto pero el esfuerzo aplicado en este proyecto muy fue
 * React + TS
 * Redux Toolkit
 * React MUI 
-* Axios
 * Playwright
 
 
@@ -43,8 +42,9 @@ yarn install
 ```
 
 2. Corre el proyecto
-
 ```sh
+npm run dev
+
 yarn dev
 ```
 

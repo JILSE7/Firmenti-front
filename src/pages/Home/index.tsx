@@ -21,7 +21,7 @@ const HomePage = () => {
   const dispatch = useDispatch();
 
   const products = useSelector((state: RootState) => state.products)
-
+  
   const getProducts = async () => {
     toast.message("Obteniendo productos")
     const {data: products} = await callEndpoint<IApiResponse<IProduct[]>>(getProductService());

@@ -95,7 +95,7 @@ const ProductForm: FC<IProps> = ({closeModal}) => {
           labelId="demo-simple-select-filled-label"
           id="demo-simple-select-filled"
           name='categoryId'
-          value={productState.categoryId}
+          value={productState.categoryId ?? ''}
           onChange={(e) => setProductState((state) => ({...state, categoryId: e.target.value}))}
         >
           {

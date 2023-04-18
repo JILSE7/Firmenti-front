@@ -7,6 +7,7 @@ export interface ICategoryStore {
   data         : ICategory[]
   count        : number,
   editCategory : ICategory | null
+  deleteCategory     : ICategory | null
   isModalOpen  : boolean
 };
 
@@ -14,7 +15,8 @@ const initialState: ICategoryStore = {
   data: [],
   count: 0,
   editCategory: null,
-  isModalOpen: false
+  isModalOpen: false,
+  deleteCategory: null
 };
 
 
@@ -108,6 +110,13 @@ export const categoriesSlice = createSlice({
         count: action.payload.length
       }
     },
+
+    setDelete: (state, action: PayloadAction<ICategory | null>) => {
+      return {
+        ...state,
+        deleteCategory: action.payload
+      }
+    },
     setEditCategory: (state, action: PayloadAction<ICategory>) => {
       return {
         ...state,
@@ -126,4 +135,4 @@ export const categoriesSlice = createSlice({
 });
 
 
-export const {setCategories, setEditCategory, handleCategoryModal} = categoriesSlice.actions;
+export const {setCategories, setEditCategory, handleCategoryModal, setDelete} = categoriesSlice.actions;

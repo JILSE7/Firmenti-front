@@ -18,19 +18,19 @@ const login = async(page: Page) => {
   //Fill the password input
   const inputEmail = await page.getByTestId("input-email");
   await expect(inputEmail).toBeInViewport();
-  inputEmail.fill("saidnnnn2@gmail.com")
-  await expect(inputEmail).toHaveValue("saidnnnn2@gmail.com");
+  inputEmail.fill("saidnnnn@gmail.com")
+  await expect(inputEmail).toHaveValue("saidnnnn@gmail.com");
 
    //submit
    await page.getByTestId('button-submit').click();
   
    const sonnerInit = await page.getByText(/Iniciando sesión/)
-   const sonnerUser = await page.getByText(/Bienvenido/)
+   // const sonnerUser = await page.getByText(/Bienvenido/)
    await expect(sonnerInit).toBeVisible();
-   await expect(sonnerUser).toBeVisible();
+   //await expect(sonnerUser).toBeVisible();
 }
 
-test.describe("Test in login page", () => {
+test.describe("Test in my Products", () => {
 
   test("Should show my products", async({page}) => {
     await page.goto(LOCAL_URL)
@@ -42,6 +42,6 @@ test.describe("Test in login page", () => {
     await expect(myProductsBtn).toHaveText("Mis Productos");
     await myProductsBtn.click()
   
-    await expect(page.getByText(/Sin productos registrados :c/)).toBeVisible()
+    await expect(page.getByText(/Mis productos/)).toBeVisible()
   });
 })

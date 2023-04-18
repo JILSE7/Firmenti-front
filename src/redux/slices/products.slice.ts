@@ -50,7 +50,11 @@ export const createProductThunk = createAsyncThunk(
 
       const { data: { data: products } } = await getProductService().call;
 
+      const { data: { data: myProducts } } = await getProductByUserService(data.userId).call;
+      
       dispatch(setProducts(products))
+
+      dispatch(setMyProducts(myProducts))
     
       cb(false)
 
@@ -119,7 +123,7 @@ export const deleteProductThunk = createAsyncThunk(
       toast.message(msg)
 
       const { data: { data: products } } = await getProductService().call;
-
+      
       const { data: { data: myProducts } } = await getProductByUserService(userId).call;
 
       dispatch(setProducts(products));

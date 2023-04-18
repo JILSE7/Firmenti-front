@@ -1,26 +1,30 @@
-import React, { useState } from 'react'
+import { FC, useState } from 'react'
 import { useCategories } from '../../hooks/useCategories';
 import { ICategory } from '../../models/category.model';
 import { setEditCategory } from '../../redux/slices';
 import { Box, Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
 import { TablePaginationActionsProps } from '@mui/material/TablePagination/TablePaginationActions';
 import { useTheme } from '@mui/material/styles';
-
-
-import LastPageIcon from '@mui/icons-material/LastPage';
-import FirstPageIcon from '@mui/icons-material/FirstPage';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
+import EditIcon from '@mui/icons-material/Edit';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
-const TableCategory = () => {
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+
+interface IProps {
+  setDeleteCategory: (category: ICategory | null) => void
+}
+
+const TableCategory: FC<IProps> = ({setDeleteCategory}) => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const { categories, dispatch } = useCategories()
 
   const editCategory = (category: ICategory) => dispatch(setEditCategory(category));
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleChangePage = (
     _: React.MouseEvent<HTMLButtonElement> | null,
@@ -34,58 +38,63 @@ const TableCategory = () => {
     setPage(0);
   };
 
-
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="custom pagination table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="center">Nombre de la categoria</TableCell>
-            <TableCell align="center">Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {(rowsPerPage > 0
-            ? categories.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : categories
-          ).map((category) => (
-            <TableRow key={category.name}>
-              <TableCell align="center" component="th" scope="row">
-                {category.name}
-              </TableCell>
-              <TableCell align="center" component="th" scope="row">
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <Button data-testid="edit-btn" onClick={() => editCategory(category)} variant="text" color='warning'>
-                    <EditIcon />
-                  </Button>
-                </Box>
-              </TableCell>
+    <>
+      <TableContainer component={Paper}>
+        <Table aria-label="custom pagination table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">Nombre de la categoria</TableCell>
+              <TableCell align="center">Actions</TableCell>
             </TableRow>
-          ))}
+          </TableHead>
+          <TableBody>
+            {(rowsPerPage > 0
+              ? categories.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : categories
+            ).map((category) => (
 
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={3}
-              count={categories.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              SelectProps={{
-                inputProps: {
-                  'aria-label': 'rows per page',
-                },
-                native: true,
-              }}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
-            />
-          </TableRow>
-        </TableFooter>
-      </Table>
-    </TableContainer>
+              <TableRow key={category.id}>
+                <TableCell align="center" component="th" scope="row">
+                  {category.name}
+                </TableCell>
+                <TableCell align="center" component="th" scope="row">
+                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Button data-testid="edit-btn" onClick={() => editCategory(category)} variant="text" color='warning'>
+                      <EditIcon />
+                    </Button>
+                    <Button onClick={() => setDeleteCategory(category)} variant="outlined" color='error'>
+                      <DeleteIcon />
+                    </Button>
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ))}
+
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                colSpan={3}
+                count={categories.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                SelectProps={{
+                  inputProps: {
+                    'aria-label': 'rows per page',
+                  },
+                  native: true,
+                }}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                ActionsComponent={TablePaginationActions}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </TableContainer>
+    </>
   )
 }
 
