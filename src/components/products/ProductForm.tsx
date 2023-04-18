@@ -11,10 +11,12 @@ interface IProps {
 }
 
 export interface IProductState {
+  id?: string;
   name        : string;
   description : string;
   categoryId  : string;
   userId      : string;
+  image?      : string;
 }
 
 const initialState: IProductState = {
@@ -49,11 +51,12 @@ const ProductForm: FC<IProps> = ({closeModal}) => {
       return dispatch(editProductThunk({data: productState, file: uploadInputRef.current!, cb: closeModal}))
     }
 
-    if (!uploadInputRef.current) toast.error("Seleccione una imagen")   
+    if (!uploadInputRef.current) return toast.error("Seleccione una imagen")   
 
     dispatch(createProductThunk({data: productState, file: uploadInputRef.current!, cb: closeModal}))
     
   };
+
   return (
     <form onSubmit={handleSubmit} style={{ height: 400, display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', alignContent: 'center' }}>
       <TextField
@@ -65,6 +68,7 @@ const ProductForm: FC<IProps> = ({closeModal}) => {
         name='name'
         onChange={handleChange}
         value={productState.name}
+        data-testid="input-product-name"
       />
       <TextField
         required

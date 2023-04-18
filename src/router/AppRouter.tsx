@@ -1,27 +1,24 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import LoginPage from '../pages/Login';
-import HomePage from '../pages/Home';
-import { useAuth } from '../hooks/useAuth';
 import { useEffect } from 'react';
-import { verifyTokenService } from '../services/auth.services';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
 import { verifySession } from '../redux/slices';
+import { CategoriesPage } from '../pages/Categories';
+
 import PrivateRoute from './PrivateRoute';
 import MyProductsPage from '../pages/MyProducts';
-/* import { AdminPage, Employee, Login } from '../views'; */
-
-/* import PrivateRoute from './PrivateRouter';
-import { useAuth } from '../hooks/useAuth'; */
+import LoginPage from '../pages/Login';
+import HomePage from '../pages/Home';
+import RegisterPage from '../pages/Register';
 
 
 const AppRouter = () => {
-  const { isLoading } = useSelector((state: RootState) => state.auth);
+  const { isLoading, login } = useSelector((state: RootState) => state.auth);
 
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(verifySession())
-  }, []);
+  }, [login]);
 
   if (isLoading) return null
 
@@ -31,6 +28,7 @@ const AppRouter = () => {
 
       <Routes>
         <Route path='/login' element={<LoginPage />} />
+        <Route path='/register' element={<RegisterPage />} />
 
         <Route path="/home" element={
           <PrivateRoute>
@@ -41,6 +39,18 @@ const AppRouter = () => {
         <Route path="/myProducts" element={
           <PrivateRoute>
             <MyProductsPage />
+          </PrivateRoute>}
+        />
+
+        <Route path="/categories" element={
+          <PrivateRoute>
+            <CategoriesPage />
+          </PrivateRoute>}
+        />
+
+        <Route path="/user" element={
+          <PrivateRoute>
+            <CategoriesPage />
           </PrivateRoute>}
         />
       </Routes>

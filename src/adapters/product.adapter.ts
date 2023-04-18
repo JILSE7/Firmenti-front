@@ -1,4 +1,4 @@
-import { IProduct } from "../models";
+
 
 export const createProductAdapter = (product: any) => ({
   name: product.name,

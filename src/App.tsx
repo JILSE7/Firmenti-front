@@ -10,7 +10,7 @@ function App() {
   return (
     <>
       <Provider store={store}>
-        <Toaster richColors position="top-right" />
+        <Toaster expand richColors position="top-right" />
         <AppRouter />
       </Provider>
     </>

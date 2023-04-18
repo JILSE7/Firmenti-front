@@ -1,26 +1,26 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { IProduct } from "../../models"
-import { getProductService, postProductService, putProductService } from "../../services/auth.services"
+import { deleteProductService, getProductByUserService, getProductService, postProductService, putProductService } from "../../services/api.services"
 import { toast } from "sonner";
-import { AxiosResponse } from "axios";
-import { IApiResponse } from "../../interfaces";
 import { IProductState } from "../../components/products/ProductForm";
 import { createProductAdapter } from "../../adapters";
 
 
 export interface IProductStore {
-  data: IProduct[],
   count: number,
-  isLoading: boolean,
+  data: IProduct[],
+  myProducts: IProduct[],
   editProduct: IProduct | null,
+  isLoading: boolean,
   isModalOpen: boolean
 }
 
 const initialState: IProductStore = {
-  data: [],
   count: 0,
-  isLoading: false,
+  data: [],
+  myProducts: [],
   editProduct: null,
+  isLoading: false,
   isModalOpen: false
 }
 
@@ -29,24 +29,31 @@ export const createProductThunk = createAsyncThunk(
   'products/createProduct',
   async (payload: { data: IProductState, file: File, cb: (openModal: boolean) => { payload: boolean; type: "products/handleProductModal"; } }, { dispatch }) => {
     try {
-      dispatch(loadingProducts());
-      const formData = new FormData();
+      const {data, cb, file} = payload
 
-      //File input
-      formData.append("file", payload.file);
+      dispatch(loadingProducts());
+
+      const formData = new FormData();
+      
+      formData.append("file", file);
 
       //User data
-      formData.append("productData", JSON.stringify(createProductAdapter(payload.data)));
+      formData.append("productData", JSON.stringify(createProductAdapter(data)));
 
       toast.message("Creando nuevo producto......")
+
       const { data: { ok } } = await postProductService(formData);
 
       if (!ok) toast.error("Hubo un error al crear el producto")
+
       toast.message("Se ha añadido un nuevo producto")
+
       const { data: { data: products } } = await getProductService().call;
 
       dispatch(setProducts(products))
-      payload.cb(false)
+    
+      cb(false)
+
     } catch (error: any) {
       console.log(error);
       toast.error(error.response.data.error)
@@ -57,30 +64,68 @@ export const createProductThunk = createAsyncThunk(
 
 export const editProductThunk = createAsyncThunk(
   'products/editProduct',
-  async ({data, file, cb}: { data: IProduct, file: File, cb: (openModal: boolean) => { payload: boolean; type: "products/handleProductModal"; } }, { dispatch }) => {
+  async ({data, file, cb}: { data: IProductState, file: File, cb: (openModal: boolean) => { payload: boolean; type: "products/handleProductModal"; } }, { dispatch }) => {
     try {
+
       dispatch(loadingProducts());
 
       const formData = new FormData();
 
-      if (file) {
-        //File input
-        formData.append("file", file);
-      }
-
+      if (file) formData.append("file", file);
+  
       //User data
       formData.append("productData", JSON.stringify(createProductAdapter(data)));
 
-
       toast.message("Editando producto......")
-      const { data: { ok } } = await putProductService(formData, data.id);
+
+      const { data: { ok } } = await putProductService(formData, data.id!);
 
       if (!ok) toast.error("Hubo un error al actualizar el producto")
+
       toast.message(`Se ha actualizado el producto ${data.name}`)
+
       const { data: { data: products } } = await getProductService().call;
 
-      dispatch(setProducts(products))
-      cb(false)
+      const { data: { data: myProducts } } = await getProductByUserService(data.userId).call;
+
+      dispatch(setProducts(products));
+
+      dispatch(setMyProducts(myProducts))
+
+      cb(false);
+
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.response.data.error)
+    }
+
+  }
+)
+
+
+export const deleteProductThunk = createAsyncThunk(
+  'products/deleteProduct',
+  async ({productId, userId}: {productId: string, userId: string}, { dispatch }) => {
+    try {
+
+      dispatch(loadingProducts());
+
+      toast.message("eliminando producto......")
+
+      const { data: { ok, msg } } = await deleteProductService(productId);
+      
+      if (!ok) toast.error("Hubo un error al eliminar el producto")
+
+      toast.message(msg)
+
+      const { data: { data: products } } = await getProductService().call;
+
+      const { data: { data: myProducts } } = await getProductByUserService(userId).call;
+
+      dispatch(setProducts(products));
+
+      dispatch(setMyProducts(myProducts))
+
     } catch (error: any) {
       console.log(error);
       toast.error(error.response.data.error)
@@ -100,6 +145,12 @@ export const productSlice = createSlice({
         count: action.payload.length,
       }
     },
+    setMyProducts: (state, action: PayloadAction<IProduct[]>) => {
+      return {
+        ...state,
+        myProducts: action.payload,
+      }
+    },
     loadingProducts: (state) => {
       return {
         ...state,
@@ -114,7 +165,6 @@ export const productSlice = createSlice({
       }
     },
     handleProductModal: (state, action: PayloadAction<boolean>) => {
-      console.log({ modal: action.payload });
       return {
         ...state,
         isModalOpen: action.payload,
@@ -125,4 +175,4 @@ export const productSlice = createSlice({
 });
 
 
-export const { setProducts, loadingProducts, setEditProduct, handleProductModal } = productSlice.actions;
+export const { setProducts, loadingProducts, setEditProduct, handleProductModal, setMyProducts } = productSlice.actions;

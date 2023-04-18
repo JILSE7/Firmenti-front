@@ -13,40 +13,87 @@ import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-import { FC } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { IProduct } from '../../models';
+import { Box, Button, Popover } from '@mui/material';
+import DeleteDialog from './DeleteDialog';
 
 export interface IProps {
   product: IProduct
-  editProduct?: (product: IProduct) => { payload: IProduct; type: "products/setEditProduct"; }
+  showEditIcon: boolean;
+  editProduct: (product: IProduct) => { payload: IProduct; type: "products/setEditProduct"; }
+  deleteProduct: (productId: string, userId:string) => any
 }
 
-const ProductItem: FC<IProps> = ({ product, editProduct }) => {
-  const { name, createdAt, description, image } = product
+const ProductItem: FC<IProps> = ({ product, editProduct, showEditIcon, deleteProduct }) => {
+  const { name, createdAt, description, image, user, category } = product;
+
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
+
+  const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget), []);
+  
+  const handleClose =  useCallback(() => setAnchorEl(null), []);
+
+  const handleDialog = useCallback((isOpen: boolean) => setIsOpenDialog(isOpen), []);
+
+  const handleDelete = () => {
+    deleteProduct(product.id, product.userId);
+    handleDialog(false);
+  }
+
   return (
-    <Card sx={{ width: 345, margin: 5 }}>
+    <>
+    <Card sx={{ width: 345, margin: 5 }} data-testid="product-card">
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            {name[0]}
+            {user?.name[0] ?? 's/n'}
           </Avatar>
         }
         action={
-          editProduct && (
-            <IconButton onClick={() => editProduct(product)} aria-label="edit">
-              <EditIcon />
-            </IconButton>
+          showEditIcon && editProduct && (
+            <>
+              <Button data-testid="options-btn" aria-describedby={id} variant="text" onClick={handleClick}>
+                <MoreVertIcon />
+              </Button>
+              <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+              >
+                <Box sx={{display: 'flex', flexDirection: 'column', padding: 1}}>
+                  <Button data-testid="edit-btn" onClick={() => editProduct(product)} variant="outlined" sx={{marginBottom: 2}} color='warning'>
+                    <EditIcon />
+                  </Button>
+                  
+                  <Button onClick={() => handleDialog(true)}  variant="outlined" color='error'>
+                    <DeleteIcon />
+                  </Button>
+                </Box>
+              </Popover>
+            </>
           )
         }
         title={name}
-        subheader={createdAt}
+        subheader={category?.name}
       />
       <CardMedia
         component="img"
-        height="194"
+        sx={{ height: 180 }}
         image={image}
         alt="Paella dish"
       />
@@ -64,6 +111,14 @@ const ProductItem: FC<IProps> = ({ product, editProduct }) => {
         </IconButton>
       </CardActions>
     </Card>
+
+    <DeleteDialog 
+      handleDelete={handleDelete}
+      handleDialog={handleDialog}
+      isOpen={isOpenDialog}
+      productName={product.name}
+    />
+    </>
   );
 }
 

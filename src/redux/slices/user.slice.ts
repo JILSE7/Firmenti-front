@@ -1,7 +1,8 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { IUser, IUserAuth } from "../../models";
-import { verifyTokenService } from "../../services/auth.services";
+import { verifyTokenService } from "../../services/api.services";
 import { toast } from "sonner";
+import { removeToken } from "../../utilities";
 
 export interface IAuthStore {login: boolean, user: IUserAuth | undefined, isLoading: boolean}
 
@@ -38,6 +39,12 @@ export const authSlices = createSlice({
         isLoading: false
       }
     },
+
+    logOut : () => {
+      removeToken()
+
+      return initialState
+    }
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
@@ -65,4 +72,4 @@ export const authSlices = createSlice({
 });
 
 
-export const {setAuthStore} = authSlices.actions;
+export const {setAuthStore, logOut} = authSlices.actions;

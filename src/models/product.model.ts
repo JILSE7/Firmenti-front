@@ -1,3 +1,6 @@
+import { ICategory } from "./category.model";
+import { IUser } from "./user.model";
+
 export interface IProduct {
   id          : string;
   name        : string;
@@ -6,4 +9,6 @@ export interface IProduct {
   userId      : string;
   categoryId  : string;
   createdAt   : string;
+  user?       : IUser
+  category?    : ICategory 
 } 

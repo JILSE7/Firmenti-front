@@ -1,12 +1,12 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { AccountCircle } from '@mui/icons-material'
 import { Box, Button, FormControl, TextField } from '@mui/material'
-import useFetchAndLoad from '../../../hooks/useFetch';
 import { useDispatch } from 'react-redux';
 import { IAuth, IUserAuth } from '../../../models';
 import { IApiResponse } from '../../../interfaces';
-import { loginService } from '../../../services/auth.services';
+import { loginService } from '../../../services/api.services';
 import { setAuthStore } from '../../../redux/slices';
+import useFetchAndLoad from '../../../hooks/useFetch';
 import KeyIcon from '@mui/icons-material/Key';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
@@ -33,7 +33,7 @@ const LoginForm = () => {
       toast.success(`Bienvenido ${user.name}`);
 
       dispatch(setAuthStore(user));
-      
+
       navigate("/home", {replace: true});
   }
 
@@ -51,8 +51,9 @@ const LoginForm = () => {
               type="email"
               value={auth.email}
               onChange={handleChange}
-              inputProps={{ maxLength: 60 }}
+              inputProps={{ maxLength: 60 , "data-testid": "input-email" }}
               disabled={loading}
+              required
             />
           </Box>
         </FormControl>
@@ -66,13 +67,14 @@ const LoginForm = () => {
             type="password"
             value={auth.password}
             onChange={handleChange}
-            inputProps={{ maxLength: 22 }}
+            inputProps={{ maxLength: 22 , "data-testid": "input-password" }}
             disabled={loading}
+            required
           />
         </Box>
 
         <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
-          <Button type="submit" variant="outlined" disabled={loading}>Log in</Button>
+          <Button data-testid="button-submit" type="submit" variant="outlined" disabled={loading}>Log in</Button>
         </Box>
       </form>
     </>

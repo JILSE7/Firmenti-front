@@ -1,4 +1,4 @@
-import { verifyTokenService } from "../services/auth.services"
+import { verifyTokenService } from "../services/api.services"
 
 
 export const useAuth = async() => {

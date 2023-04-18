@@ -5,14 +5,14 @@ import AddIcon from '@mui/icons-material/Add';
 import { FC } from 'react';
 
 interface IProps {
-  handleOpenModal: (openModal: boolean) => { payload: boolean; type: "products/handleProductModal";}
+  handleOpenModal: (openModal: boolean) => { payload: boolean; type: any;}
 }
 
 const FloatingActionButton: FC<IProps> = ({ handleOpenModal }) => {
 
   return (
     <Box sx={{ '& > :not(style)': { m: 1 }, position: "fixed", bottom: 25, right: 25 }}>
-      <Fab color="secondary" aria-label="add" onClick={() => handleOpenModal(true)}>
+      <Fab data-testid="FAB" color="secondary" aria-label="add" onClick={() => handleOpenModal(true)}>
         <AddIcon />
       </Fab>
     </Box>

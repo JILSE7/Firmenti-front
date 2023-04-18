@@ -9,9 +9,9 @@ import { ICategory } from "../../models/category.model"
 import { IProduct } from "../../models"
 import { RootState } from "../../redux/store"
 import { useEffect } from "react"
-import { getCategoriesService, getProductService } from "../../services/auth.services"
+import { getCategoriesService, getProductService } from "../../services/api.services"
 import { ProductList } from "../../components"
-import ModalProduct from "../../components/products/ModalProduct"
+import ModalProduct from "../../components/modals/ModalProduct"
 
 
 const HomePage = () => {

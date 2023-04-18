@@ -13,14 +13,17 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux/store';
+import { logOut } from '../../redux/slices';
 
-const settings = ['Profile', 'Logout'];
 
-const pages = [{ name: 'Mis Productos', path: '/myProducts' }];
+const pages = [{ name: 'Mis Productos', path: '/myProducts' }, { name: 'Categorias', path: '/categories' }];
 
 function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>()
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -30,7 +33,9 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
-
+  const handleLogOut = () => {
+    dispatch(logOut())
+  }
 
   return (
     <AppBar position="static">
@@ -63,6 +68,7 @@ function ResponsiveAppBar() {
             {pages.map((page) => (
               <Button
                 key={page.path}
+                data-testid="button-myproducts"
                 onClick={() => navigate(page.path)}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
@@ -93,11 +99,12 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+              <MenuItem >
+                  <Typography textAlign="center">Perfil</Typography>
                 </MenuItem>
-              ))}
+                <MenuItem onClick={handleLogOut}>
+                  <Typography textAlign="center">Log Out</Typography>
+                </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
