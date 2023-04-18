@@ -5,12 +5,14 @@ import { IAuth, IProduct } from "../models";
 import { IApiResponse } from "../interfaces";
 import { ICategory } from "../models/category.model";
 
+const LOCAL_URL = "http://localhost:5001/api"
+
 
 export const registerService = (newUser: RegisterUser) => {
   const controller = loadAbort();
 
   return {
-    call: axios.post<IApiResponse<IUserAuth>>("http://localhost:5001/api/user", newUser, {
+    call: axios.post<IApiResponse<IUserAuth>>(`${LOCAL_URL}/user`, newUser, {
       signal: controller.signal
     }),
     controller
@@ -21,7 +23,7 @@ export const loginService = (auth: IAuth) => {
   const controller = loadAbort();
 
   return {
-    call: axios.post<IApiResponse<IUserAuth>>("http://localhost:5001/api/auth/login", auth, {
+    call: axios.post<IApiResponse<IUserAuth>>(`${LOCAL_URL}/auth/login`, auth, {
       signal: controller.signal
     }),
     controller
@@ -29,7 +31,7 @@ export const loginService = (auth: IAuth) => {
 }
 
 export const verifyTokenService = async() => {
-  const response = await axios.post<IApiResponse<IUserAuth>>("http://localhost:5001/api/auth/renew", {
+  const response = await axios.post<IApiResponse<IUserAuth>>(`${LOCAL_URL}/auth/renew`, {
       headers: {
         'Content-Type': 'application/json', 
       }
@@ -43,7 +45,7 @@ export const getProductService = () => {
   const controller = loadAbort();
 
   return {
-    call: axios.get<IApiResponse<IProduct[]>>("http://localhost:5001/api/product/", {
+    call: axios.get<IApiResponse<IProduct[]>>(`${LOCAL_URL}/product/`, {
       signal: controller.signal,
       headers: {
         'Content-Type': 'application/json', 
@@ -57,7 +59,7 @@ export const getProductByUserService = (id: string) => {
   const controller = loadAbort();
 
   return {
-    call: axios.get<IApiResponse<IProduct[]>>(`http://localhost:5001/api/product/me/${id}`, {
+    call: axios.get<IApiResponse<IProduct[]>>(`${LOCAL_URL}/product/me/${id}`, {
       signal: controller.signal,
       headers: {
         'Content-Type': 'application/json', 
@@ -69,7 +71,7 @@ export const getProductByUserService = (id: string) => {
 
 
 export const postProductService = (product: FormData) => {
-  const response = axios.post<IApiResponse<IProduct[]>>("http://localhost:5001/api/product/", product, {
+  const response = axios.post<IApiResponse<IProduct[]>>(`${LOCAL_URL}/product/`, product, {
       headers: {
         'Content-Type': 'multipart/form-data', 
         'Accept': 'application/json'
@@ -81,7 +83,7 @@ export const postProductService = (product: FormData) => {
 
 
 export const putProductService = (product: FormData, id: string) => {
-  const response = axios.put<IApiResponse<IProduct[]>>(`http://localhost:5001/api/product/${id}`, product, {
+  const response = axios.put<IApiResponse<IProduct[]>>(`${LOCAL_URL}/product/${id}`, product, {
       headers: {
         'Content-Type': 'multipart/form-data', 
         'Accept': 'application/json'
@@ -92,7 +94,7 @@ export const putProductService = (product: FormData, id: string) => {
 }
 
 export const deleteProductService = (productId: string) => {
-  const response = axios.delete<IApiResponse<IProduct>>(`http://localhost:5001/api/product/${productId}`);
+  const response = axios.delete<IApiResponse<IProduct>>(`${LOCAL_URL}/product/${productId}`);
 
   return response;
 }
@@ -102,7 +104,7 @@ export const getCategoriesService = () => {
   const controller = loadAbort();
 
   return {
-    call: axios.get<IApiResponse<ICategory[]>>("http://localhost:5001/api/category/", {
+    call: axios.get<IApiResponse<ICategory[]>>(`${LOCAL_URL}/category/`, {
       signal: controller.signal,
       headers: {
         'Content-Type': 'application/json', 
@@ -115,21 +117,21 @@ export const getCategoriesService = () => {
 
 
 export const createCategoryService = (categoryName: string) => {
-  const response = axios.post<IApiResponse<ICategory>>(`http://localhost:5001/api/category/`, {name: categoryName});
+  const response = axios.post<IApiResponse<ICategory>>(`${LOCAL_URL}/category/`, {name: categoryName});
 
   return response;
   
 }
 
 export const putCategoryService = (category: ICategory) => {
-  const response = axios.put<IApiResponse<ICategory>>(`http://localhost:5001/api/category/${category.id}`, category);
+  const response = axios.put<IApiResponse<ICategory>>(`${LOCAL_URL}/category/${category.id}`, category);
 
   return response;
   
 }
 
 export const deleteCategoryService = (categoryId: string) => {
-  const response = axios.delete<IApiResponse<any>>(`http://localhost:5001/api/category/${categoryId}`);
+  const response = axios.delete<IApiResponse<any>>(`${LOCAL_URL}/category/${categoryId}`);
 
   return response;
   

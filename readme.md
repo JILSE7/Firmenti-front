@@ -36,10 +36,9 @@ Por supuesto nada es perfecto pero el esfuerzo aplicado en este proyecto muy fue
 1. Clona el repositorio
 
 2. Instala dependencias
+Recomiendo usar yarn pues npm da errores al momento de instalar las dependencias
 
 ```sh
-npm install 
-
 yarn install
 ```
 
@@ -56,4 +55,6 @@ npx playwright test
 ```
 
 ### Uso
-Al levantarse el proyecto primero deberas registrarte como usuario para poder ingresar.
+Al levantarse el proyecto primero deberas registrar un usuario para poder ingresar.
+Para poder crear productos debes primero crear una categoria.
+
