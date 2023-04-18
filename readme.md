@@ -35,20 +35,22 @@ Por supuesto nada es perfecto pero el esfuerzo aplicado en este proyecto muy fue
 
 1. Clona el repositorio
 
+2. Instala dependencias
+
 ```sh
 npm install 
 
 yarn install
 ```
 
-2. Corre el proyecto
+3. Corre el proyecto
 ```sh
 npm run dev
 
 yarn dev
 ```
 
-3. Correr pruebas E2E 
+4. Correr pruebas E2E 
 ```sh
 npx playwright test
 ```
